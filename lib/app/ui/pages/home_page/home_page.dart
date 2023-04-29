@@ -5,6 +5,8 @@ import '../../../controllers/home_controller.dart';
 
 
 class HomePage extends GetView<HomeController> {
+  
+  final HomeController _homeController = Get.put(HomeController());
   bool sesion = false;
 
   @override
@@ -12,7 +14,7 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.brown,
-        actions: [sesion ? botonCerrarSesion() : botonLogin(context)],
+        actions: [sesion ? botonCerrarSesion() : botonLogin()],
         title: const Text('Promociones'),
       ),
       body: sesion ? mainSesion() : mainNoSesion(),
@@ -26,9 +28,11 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  IconButton botonLogin(BuildContext context) {
+  IconButton botonLogin() {
     return IconButton(
-        onPressed: () {},
+        onPressed: () {
+          _homeController.initLogin();
+        },
         icon: const Icon(Icons.login));
   }
 

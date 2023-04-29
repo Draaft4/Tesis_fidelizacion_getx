@@ -1,4 +1,5 @@
 import 'package:app_fidelizacion/app/ui/pages/home_page/home_page.dart';
+import 'package:app_fidelizacion/app/ui/pages/login_page/login_page.dart';
 import 'package:app_fidelizacion/app/ui/pages/splash_page/splash_page.dart';
 import 'package:get/get.dart';
 part './routes.dart';
@@ -12,6 +13,10 @@ abstract class AppPages {
     GetPage(
       name: Routes.INITIAL,
       page: () => SplashPage(),
+    ),
+    GetPage(
+      name: Routes.LOGIN,
+      page: () => LoginPage(),
     ),
   ];
 }
