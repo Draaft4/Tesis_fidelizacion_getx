@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.5
+  firebase_messaging: ^14.6.2
+  firebase_core: ^2.13.1
 
   cupertino_icons: ^1.0.2
 

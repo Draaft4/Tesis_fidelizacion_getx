@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "300754219920",
+    "project_id": "fidelizacion-app",
+    "storage_bucket": "fidelizacion-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300754219920:android:191823f177325dfe6eb915",
+        "android_client_info": {
+          "package_name": "com.example.app_fidelizacion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300754219920-lgvl6a9uboh2ih2g0cd10fbi6hvauthf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjj5kXjF3LltbOF4gaLRGKyl0zgyc-zCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300754219920-1930jjdf8418hga4adigog16sncno4p3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "300754219920-khb4iikoqpgnvcfar57i3kdfpkj6bg1p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fidelizacionApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300754219920:android:8d7530906292e9066eb915",
+        "android_client_info": {
+          "package_name": "com.example.fidelizacion_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300754219920-othb0giprb09a8116ek46frvqhe53m75.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fidelizacion_app",
+            "certificate_hash": "e75f634aa5080b469414e60e87c6ca132dd0f646"
+          }
+        },
+        {
+          "client_id": "300754219920-lgvl6a9uboh2ih2g0cd10fbi6hvauthf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjj5kXjF3LltbOF4gaLRGKyl0zgyc-zCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300754219920-1930jjdf8418hga4adigog16sncno4p3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "300754219920-khb4iikoqpgnvcfar57i3kdfpkj6bg1p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fidelizacionApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
