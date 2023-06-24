@@ -12,6 +12,8 @@ class LoginPage extends GetView<LoginController> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final LoginController _loginController = Get.put(LoginController());
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -77,11 +79,7 @@ class LoginPage extends GetView<LoginController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            botonLogInGoogle(),
-                            const SizedBox(width: 50),
-                            botonLogInFacebok(),
-                            const SizedBox(width: 50),
-                            botonLogInEmail(),
+                            botonRegisterInEmail(),
                           ],
                         )
                       ],
@@ -130,26 +128,11 @@ class LoginPage extends GetView<LoginController> {
     );
   }
 
-  GestureDetector botonLogInFacebok() {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        width: 60,
-        height: 60,
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.white38,
-        ),
-        child: Image.asset('static/facebook.png'),
-      ),
-    );
-  }
 
-  GestureDetector botonLogInEmail() {
+  GestureDetector botonRegisterInEmail() {
     return GestureDetector(
       onTap: () {
-        
+        _loginController.register();
       },
       child: Container(
         width: 60,
@@ -164,26 +147,10 @@ class LoginPage extends GetView<LoginController> {
     );
   }
 
-  GestureDetector botonLogInGoogle() {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        width: 60,
-        height: 60,
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.white38,
-        ),
-        child: Image.asset('static/google.png'),
-      ),
-    );
-  }
-
   GestureDetector botonLogin() {
     return GestureDetector(
       onTap: (){
-        
+        _loginController.login(_emailController.text, _passwordController.text);
       },
       child: Container(
         decoration: BoxDecoration(

@@ -1,16 +1,19 @@
-
+import 'package:app_fidelizacion/app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/home_controller.dart';
 
-
 class HomePage extends GetView<HomeController> {
-  
+
   final HomeController _homeController = Get.put(HomeController());
+  final Auth_Controller _authController = Get.find();
+  
   bool sesion = false;
 
   @override
   Widget build(BuildContext context) {
+    _authController.isInSession();
+    sesion = _authController.isLogged.value;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.brown,
@@ -24,7 +27,9 @@ class HomePage extends GetView<HomeController> {
   IconButton botonCerrarSesion() {
     return IconButton(
       icon: const Icon(Icons.close),
-      onPressed: () {},
+      onPressed: () {
+        _authController.cerrarSesion();
+      },
     );
   }
 
@@ -66,4 +71,3 @@ class HomePage extends GetView<HomeController> {
     );
   }
 }
-  

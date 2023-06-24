@@ -20,7 +20,7 @@ class SplashPage extends StatelessWidget {
   }
 
   Column content() {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
@@ -29,11 +29,11 @@ class SplashPage extends StatelessWidget {
                 height: 100.0,
                 child: Card(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding:  EdgeInsets.all(16.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(height: 16.0),
+                         SizedBox(height: 16.0),
                         CircularProgressIndicator(),
                       ],
                     ),
