@@ -39,7 +39,8 @@ void main() async {
     }
   });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  //final fcmToken = await messaging.getToken();
+  final fcmToken = await messaging.getToken();
+  print(fcmToken);
   final Auth_Controller authController = Get.put(Auth_Controller(), permanent: true);
   authController.isInSession();
   runApp(GetMaterialApp(
