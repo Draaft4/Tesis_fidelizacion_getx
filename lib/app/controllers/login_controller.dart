@@ -22,7 +22,7 @@ class LoginController extends GetxController {
   }
 
   void register(){
-    Get.toNamed("/register");
+    Get.offNamed("/register");
   }
 
 }

@@ -55,6 +55,11 @@ class RegisterPage extends GetView<RegisterController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(child: labelLogin('Registro de usuario')),
+                        Center(child: Image.asset(
+                          'static/1981-removebg-preview.png',
+                          width: 180,
+                          height: 180,
+                        )),
                         const SizedBox(height: 25),
                         camposTexto('Correo Electrónico', false, Icons.mail,
                             _emailController),
@@ -66,6 +71,8 @@ class RegisterPage extends GetView<RegisterController> {
                             _valpasswordController),
                         const SizedBox(height: 35),
                         botonRegister(),
+                        const SizedBox(height: 35,),
+                        botonback()
                       ],
                     ),
                   ],
@@ -112,7 +119,7 @@ class RegisterPage extends GetView<RegisterController> {
       ),
     );
   }
-
+ 
   GestureDetector botonRegister() {
     return GestureDetector(
       onTap: () {
@@ -132,13 +139,13 @@ class RegisterPage extends GetView<RegisterController> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: Colors.white60,
+          color: Colors.brown.shade400,
         ),
         child: const Center(
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Text(
-              'Registrar',
+              'Registrarse',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 30,
@@ -149,5 +156,28 @@ class RegisterPage extends GetView<RegisterController> {
         ),
       ),
     );
+  }
+  GestureDetector botonback(){
+    return GestureDetector(
+      onTap: (){
+        Get.offNamed('/login');
+      },
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius:BorderRadius.circular(15) 
+         ),
+         child: const Align(
+              alignment: Alignment.center,
+              child: Icon(
+            Icons.replay,
+            color:Colors.white,
+            size:70
+              ),
+     
+         ),
+        ),
+      );
+    
   }
 }

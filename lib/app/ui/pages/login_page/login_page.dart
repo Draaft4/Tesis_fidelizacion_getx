@@ -1,10 +1,9 @@
-
+import 'dart:math';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/login_controller.dart';
-
+import '../../../controllers/registerform_controller.dart';
 
 class LoginPage extends GetView<LoginController> {
 
@@ -14,6 +13,7 @@ class LoginPage extends GetView<LoginController> {
 
   final LoginController _loginController = Get.put(LoginController());
 
+  final RegisterFormController _registerFormController= Get.put(RegisterFormController()); 
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -41,58 +41,100 @@ class LoginPage extends GetView<LoginController> {
     );
   }
 
-  Widget content() {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Card(
-              color: Colors.transparent,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(child: labelLogin('Inicio de Sesión')),
-                        const SizedBox(height: 25),
-                        camposTexto('Correo Electrónico', false, Icons.mail, _emailController),
-                        const SizedBox(height: 15),
-                        camposTexto('Contraseña', true, Icons.lock, _passwordController),
-                        const SizedBox(height: 35),
-                        botonLogin(),
-                        const SizedBox(height: 35),
-                        const Center(
-                          child: Text(
-                            '- Registrate con: -',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
+Widget content() {
+  return Scaffold(
+    backgroundColor: Colors.transparent,
+    body: Stack(
+      children: [
+        Positioned(
+          top: 60,
+          left: 16,
+          child: SizedBox(
+            width: 48,
+            height: 48,
+            child: IconButton(
+              iconSize: 40, // Ajusta el tamaño del icono
+              icon: const Icon(Icons.arrow_back_outlined),
+              color:Colors.white,
+              onPressed: () {
+                Get.offNamed("/home");
+              },
+            ),
+          ),
+        ),
+        Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Card(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(child: labelLogin('Inicio de Sesión')),
+                          Center(
+                            child: Image.asset(
+                              'static/coffee-cup.png',
+                              width: 180,
+                              height: 180,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            botonRegisterInEmail(),
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
+                          const SizedBox(height: 25),
+                          camposTexto(
+                            'Correo Electrónico',
+                            false,
+                            Icons.mail,
+                            _emailController,
+                          ),
+                          const SizedBox(height: 15),
+                          camposTexto(
+                            'Contraseña',
+                            true,
+                            Icons.lock,
+                            _passwordController,
+                          ),
+                          const SizedBox(height: 35),
+                          botonLogin(),
+                          const SizedBox(height: 35),
+                          const Center(
+                            child: Text(
+                              '- Registrate con: -',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              botonRegisterInEmail(),
+                              const SizedBox(width: 10),
+                              botonFacebook(),
+                              const SizedBox(width: 10),
+                              botonGulugulu(),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
+
 
   Container camposTexto(String val, bool pwd, IconData icono, TextEditingController controller) {
     return Container(
@@ -146,7 +188,40 @@ class LoginPage extends GetView<LoginController> {
       ),
     );
   }
-
+  GestureDetector botonFacebook(){
+    return GestureDetector(
+      onTap:(){
+          _registerFormController.formlog();
+      },
+      child:Container(
+        width: 60,
+        height: 60,
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color:Colors.white38
+        ),
+        child: Image.asset('static/facebook.png'),
+      )
+    );
+  }
+  GestureDetector botonGulugulu(){
+    return GestureDetector(
+      onTap:(){
+           _registerFormController.formlog();
+      },
+      child:Container(
+        width: 60,
+        height: 60,
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color:Colors.white38
+        ),
+        child: Image.asset('static/google.png'),
+      )
+    );
+  }
   GestureDetector botonLogin() {
     return GestureDetector(
       onTap: (){
@@ -155,13 +230,13 @@ class LoginPage extends GetView<LoginController> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: Colors.white60,
+          color: Colors.brown.shade400,
         ),
         child: const Center(
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Text(
-              ' Log In',
+              ' Iniciar Sesión',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 30,
@@ -170,6 +245,23 @@ class LoginPage extends GetView<LoginController> {
             ),
           ),
         ),
+      ),
+    );
+  }
+  GestureDetector botonback(){
+    return GestureDetector(
+      onTap: () {
+        Get.offNamed('/home');
+      },
+      child:Container (
+        width:50,
+        height: 40,
+        decoration:const BoxDecoration(
+          color:Colors.white,
+        ),
+      child:const Icon(
+        Icons.replay
+      )
       ),
     );
   }

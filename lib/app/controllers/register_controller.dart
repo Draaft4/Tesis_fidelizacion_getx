@@ -16,7 +16,7 @@ class RegisterController extends GetxController  {
             duration: const Duration(seconds: 3),
     );
     }else{
-      Get.offNamed("/home");
+      Get.offNamed("/registerform");
     }
   }
 }
