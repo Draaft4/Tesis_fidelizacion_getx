@@ -1,3 +1,4 @@
+import 'package:app_fidelizacion/app/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -6,8 +7,9 @@ import 'package:app_fidelizacion/app/controllers/auth_controller.dart';
 import '../../../controllers/home_controller.dart';
 
 class PerfilPage extends GetView<PerfilController> {
-  final HomeController _homeController = Get.put(HomeController());
+  final PerfilController _perfilController = Get.put(PerfilController());
   final Auth_Controller _authController = Get.find();
+  final UserController _userController = Get.find();
   bool sesion = false;
 
   @override
@@ -42,7 +44,7 @@ class PerfilPage extends GetView<PerfilController> {
           ),
           const SizedBox(height: 15),
           Center(
-            child: points("48852"),
+            child: points("${_userController.usuario.value.points}"),
           ),
           const SizedBox(height: 15),
           const Center(
@@ -64,14 +66,16 @@ class PerfilPage extends GetView<PerfilController> {
             child: Column(
               children: [
                 labelUserData(
-                    "Identificación :", Icons.recent_actors, "0106481914"),
+                    "Identificación :", Icons.recent_actors, _userController.usuario.value.vat),
                 const SizedBox(height: 5),
-                labelUserData("Nombre Completo :", Icons.calendar_today,
-                    "Manuel Sebastián Bedoya Ortega"),
+                labelUserData("Nombre Completo :", Icons.account_circle_rounded,
+                    _userController.usuario.value.name),
                 const SizedBox(height: 5),
-                labelUserData("Número de telefono", Icons.mail, "0939027397"),
+                labelUserData("Número de telefono", Icons.phone, _userController.usuario.value.phone),
                 const SizedBox(height: 5),
-                labelUserData("Fecha de nacimiento", Icons.mail, "12-07-2000"),
+                labelUserData("Fecha de nacimiento", Icons.calendar_month, _userController.usuario.value.bithDate),
+                const SizedBox(height: 5),
+                labelUserData("Correo Electronico", Icons.alternate_email_rounded, _userController.usuario.value.email),
                 const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
@@ -141,7 +145,7 @@ class PerfilPage extends GetView<PerfilController> {
   IconButton butonlogin() {
     return IconButton(
         onPressed: () {
-          _homeController.initLogin();
+          _perfilController.initLogin();
         },
         icon: const Icon(Icons.login));
   }

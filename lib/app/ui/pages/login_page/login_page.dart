@@ -6,14 +6,13 @@ import '../../../controllers/login_controller.dart';
 import '../../../controllers/registerform_controller.dart';
 
 class LoginPage extends GetView<LoginController> {
-
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   final LoginController _loginController = Get.put(LoginController());
 
-  final RegisterFormController _registerFormController= Get.put(RegisterFormController()); 
+  final RegisterFormController _registerFormController =
+      Get.put(RegisterFormController());
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -41,102 +40,87 @@ class LoginPage extends GetView<LoginController> {
     );
   }
 
-Widget content() {
-  return Scaffold(
-    backgroundColor: Colors.transparent,
-    body: Stack(
-      children: [
-        Positioned(
-          top: 60,
-          left: 16,
-          child: SizedBox(
-            width: 48,
-            height: 48,
-            child: IconButton(
-              iconSize: 40, // Ajusta el tamaño del icono
-              icon: const Icon(Icons.arrow_back_outlined),
-              color:Colors.white,
-              onPressed: () {
-                Get.offNamed("/home");
-              },
-            ),
-          ),
-        ),
-        Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Card(
-                color: Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(child: labelLogin('Inicio de Sesión')),
-                          Center(
-                            child: Image.asset(
-                              'static/coffee-cup.png',
-                              width: 180,
-                              height: 180,
-                            ),
-                          ),
-                          const SizedBox(height: 25),
-                          camposTexto(
-                            'Correo Electrónico',
-                            false,
-                            Icons.mail,
-                            _emailController,
-                          ),
-                          const SizedBox(height: 15),
-                          camposTexto(
-                            'Contraseña',
-                            true,
-                            Icons.lock,
-                            _passwordController,
-                          ),
-                          const SizedBox(height: 35),
-                          botonLogin(),
-                          const SizedBox(height: 35),
-                          const Center(
-                            child: Text(
-                              '- Registrate con: -',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
+  Widget content() {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(child: labelLogin('Inicio de Sesión')),
+                            Center(
+                              child: Image.asset(
+                                'static/coffee-cup.png',
+                                width: 180,
+                                height: 180,
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              botonRegisterInEmail(),
-                              const SizedBox(width: 10),
-                              botonFacebook(),
-                              const SizedBox(width: 10),
-                              botonGulugulu(),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                            const SizedBox(height: 25),
+                            camposTexto(
+                              'Correo Electrónico',
+                              false,
+                              Icons.mail,
+                              _emailController,
+                            ),
+                            const SizedBox(height: 15),
+                            camposTexto(
+                              'Contraseña',
+                              true,
+                              Icons.lock,
+                              _passwordController,
+                            ),
+                            const SizedBox(height: 35),
+                            botonLogin(),
+                            const SizedBox(height: 35),
+                            const Center(
+                              child: Text(
+                                '- Registrate con: -',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                botonRegisterInEmail(),
+                                const SizedBox(width: 10),
+                                botonFacebook(),
+                                const SizedBox(width: 10),
+                                botonGulugulu(),
+                              ],
+                            ),
+                            Center(child: botonback()),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
-
-  Container camposTexto(String val, bool pwd, IconData icono, TextEditingController controller) {
+  Container camposTexto(
+      String val, bool pwd, IconData icono, TextEditingController controller) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -170,7 +154,6 @@ Widget content() {
     );
   }
 
-
   GestureDetector botonRegisterInEmail() {
     return GestureDetector(
       onTap: () {
@@ -188,43 +171,40 @@ Widget content() {
       ),
     );
   }
-  GestureDetector botonFacebook(){
+
+  GestureDetector botonFacebook() {
     return GestureDetector(
-      onTap:(){
+        onTap: () {
           _registerFormController.formlog();
-      },
-      child:Container(
-        width: 60,
-        height: 60,
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color:Colors.white38
-        ),
-        child: Image.asset('static/facebook.png'),
-      )
-    );
+        },
+        child: Container(
+          width: 60,
+          height: 60,
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15), color: Colors.white38),
+          child: Image.asset('static/facebook.png'),
+        ));
   }
-  GestureDetector botonGulugulu(){
+
+  GestureDetector botonGulugulu() {
     return GestureDetector(
-      onTap:(){
-           _registerFormController.formlog();
-      },
-      child:Container(
-        width: 60,
-        height: 60,
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color:Colors.white38
-        ),
-        child: Image.asset('static/google.png'),
-      )
-    );
+        onTap: () {
+          _registerFormController.formlog();
+        },
+        child: Container(
+          width: 60,
+          height: 60,
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15), color: Colors.white38),
+          child: Image.asset('static/google.png'),
+        ));
   }
+
   GestureDetector botonLogin() {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         _loginController.login(_emailController.text, _passwordController.text);
       },
       child: Container(
@@ -248,22 +228,19 @@ Widget content() {
       ),
     );
   }
-  GestureDetector botonback(){
+
+  GestureDetector botonback() {
     return GestureDetector(
       onTap: () {
         Get.offNamed('/home');
       },
-      child:Container (
-        width:50,
-        height: 40,
-        decoration:const BoxDecoration(
-          color:Colors.white,
-        ),
-      child:const Icon(
-        Icons.replay
-      )
-      ),
+      child: const SizedBox(
+          width: 50,
+          height: 50,
+          child: Icon(
+            Icons.replay,
+            color: Colors.white,
+          )),
     );
   }
 }
-  

@@ -5,14 +5,21 @@ import 'package:app_fidelizacion/app/controllers/auth_controller.dart';
 import '../../../controllers/home_controller.dart';
 
 class NotificationsPage extends GetView<NotificationsController> {
-  final HomeController _homeController = Get.put(HomeController());
+  final NotificationsController _notificationsController =
+      Get.put(NotificationsController());
   final Auth_Controller _authController = Get.find();
   bool sesion = false;
+  List notificaciones = [];
   @override
   Widget build(BuildContext context) {
+    updateList();
     return Stack(
       children: [background(), content()],
     );
+  }
+
+  void updateList() async {
+    await _notificationsController.getNotifications();
   }
 
   Container background() {
@@ -30,28 +37,39 @@ class NotificationsPage extends GetView<NotificationsController> {
         actions: [sesion ? botonCerrarSesion() : butonlogin()],
         title: const Text('Notificaciones'),
       ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 20,),
-          const Center(
-            child: Text(
-              "Tus Notificaciones",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      body: RefreshIndicator(
+          onRefresh: () => _notificationsController.getNotifications(),
+          child: Column(children: [
+            const SizedBox(
+              height: 20,
+            ),
+            const Center(
+              child: Text(
+                "Tus Notificaciones",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 15,),
-          cardNotificacion("Notificación 1", "Descripción de la notificación 1",
-              "01/01/2022"),
-          cardNotificacion("Notificación 2", "Descripción de la notificación 2",
-              "02/01/2022"),
-          cardNotificacion("Notificación 3", "Descripción de la notificación 3",
-              "03/01/2022"),
-          
-        ],
-      ),
+            const SizedBox(
+              height: 15,
+            ),
+            Expanded(
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: _notificationsController.notificaciones.length,
+                itemBuilder: (context, index) => cardNotificacion(
+                  "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["title"]}",
+                  "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["message"]}",
+                  (_notificationsController.notificaciones[index].data()
+                          as Map<String, dynamic>)["date"]
+                      .toDate()
+                      .toString(),
+                ),
+              ),
+            ),
+          ])),
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 200, 200, 200),
         child: Row(
@@ -69,7 +87,6 @@ class NotificationsPage extends GetView<NotificationsController> {
         title: Text(valtitle),
         subtitle: Text(valDescriptions),
         trailing: Text(valdate),
-        
       ),
     );
   }
@@ -86,7 +103,7 @@ class NotificationsPage extends GetView<NotificationsController> {
   IconButton butonlogin() {
     return IconButton(
         onPressed: () {
-          _homeController.initLogin();
+          _notificationsController.initLogin();
         },
         icon: const Icon(Icons.login));
   }
@@ -173,6 +190,4 @@ class NotificationsPage extends GetView<NotificationsController> {
       ),
     );
   }
-
-
 }

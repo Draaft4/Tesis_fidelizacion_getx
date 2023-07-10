@@ -1,11 +1,16 @@
+import 'package:app_fidelizacion/app/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // ignore: camel_case_types
 class Auth_Controller extends GetxController {
   RxBool isLogged = false.obs;
 
   var instance = FirebaseAuth.instance;
+
+  UserController userController = Get.find();
 
   void isInSession() {
     instance.authStateChanges().listen((User? user) {
@@ -16,7 +21,6 @@ class Auth_Controller extends GetxController {
       }
     });
   }
-
 
   Future<String> registerEmailPass(String email, String pass) async {
     try {
@@ -40,6 +44,28 @@ class Auth_Controller extends GetxController {
 
   Future<String> loginEmailPass(String email, String pass) async {
     try {
+      var url = Uri.parse('http://192.168.1.18:8086/api/login?email=$email');
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        var jsonResponse = json.decode(response.body);
+        var partnerId = jsonResponse['partner_id'];
+        url =
+            Uri.parse('http://192.168.1.18:8086/api/clientData?id=$partnerId');
+        response = await http.get(url);
+        var userJson = json.decode(response.body);
+        url = Uri.parse(
+            'http://192.168.1.18:8086/api/loyaltyData?id=${userJson['id']}');
+        response = await http.get(url);
+        var pointsJson = json.decode(response.body);
+        userController.setUserData(
+            userJson['id'],
+            userJson['name'],
+            userJson['email'],
+            userJson['vat'],
+            userJson['phone'],
+            userJson['birth_date'],
+            pointsJson[0]["points"]);
+      }
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pass);
     } on FirebaseAuthException catch (e) {
