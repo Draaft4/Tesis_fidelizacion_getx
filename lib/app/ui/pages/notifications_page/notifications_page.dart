@@ -8,7 +8,6 @@ class NotificationsPage extends GetView<NotificationsController> {
   final NotificationsController _notificationsController =
       Get.put(NotificationsController());
   final Auth_Controller _authController = Get.find();
-  bool sesion = false;
   List notificaciones = [];
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,7 @@ class NotificationsPage extends GetView<NotificationsController> {
       backgroundColor: const Color.fromARGB(255, 200, 200, 200),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 77, 23, 4),
-        actions: [sesion ? botonCerrarSesion() : butonlogin()],
+        actions: [_authController.isLogged.value ? botonCerrarSesion() : butonlogin()],
         title: const Text('Notificaciones'),
       ),
       body: RefreshIndicator(
@@ -166,7 +165,11 @@ class NotificationsPage extends GetView<NotificationsController> {
   GestureDetector botonperfil() {
     return GestureDetector(
       onTap: () {
-        Get.offNamed("/perfil");
+        if(_authController.isLogged.value){
+          Get.offNamed("/perfil");
+        }else{
+          _notificationsController.initLogin();
+        }
       },
       child: Container(
         width: 40,

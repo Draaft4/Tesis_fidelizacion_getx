@@ -1,3 +1,4 @@
+import 'package:app_fidelizacion/app/constants/constants.dart';
 import 'package:app_fidelizacion/app/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -12,15 +13,7 @@ class Auth_Controller extends GetxController {
 
   UserController userController = Get.find();
 
-  void isInSession() {
-    instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        isLogged.value = false;
-      } else {
-        isLogged.value = true;
-      }
-    });
-  }
+  Constants constants = Constants();
 
   Future<String> registerEmailPass(String email, String pass) async {
     try {
@@ -28,6 +21,31 @@ class Auth_Controller extends GetxController {
         email: email,
         password: pass,
       );
+      var url = Uri.parse('${constants.url}/api/login?email=$email');
+      var response = await http.get(url);
+      var jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      if (jsonResponse["message"] == "error") {
+        userController.setMail(email);
+        Get.offNamed("/registerform");
+      } else {
+        var partnerId = jsonResponse['partner_id'];
+        url = Uri.parse('${constants.url}/api/clientData?id=$partnerId');
+        response = await http.get(url);
+        var userJson = json.decode(response.body);
+        url =
+            Uri.parse('${constants.url}/api/loyaltyData?id=${userJson['id']}');
+        response = await http.get(url);
+        var pointsJson = json.decode(response.body);
+        userController.setUserData(
+            userJson['id'],
+            userJson['name'],
+            userJson['email'],
+            userJson['vat'],
+            userJson['phone'],
+            userJson['birth_date'],
+            pointsJson[0]["points"]);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return ('The password provided is too weak.');
@@ -44,17 +62,16 @@ class Auth_Controller extends GetxController {
 
   Future<String> loginEmailPass(String email, String pass) async {
     try {
-      var url = Uri.parse('http://192.168.1.18:8086/api/login?email=$email');
+      var url = Uri.parse('${constants.url}/api/login?email=$email');
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
         var partnerId = jsonResponse['partner_id'];
-        url =
-            Uri.parse('http://192.168.1.18:8086/api/clientData?id=$partnerId');
+        url = Uri.parse('${constants.url}/api/clientData?id=$partnerId');
         response = await http.get(url);
         var userJson = json.decode(response.body);
-        url = Uri.parse(
-            'http://192.168.1.18:8086/api/loyaltyData?id=${userJson['id']}');
+        url =
+            Uri.parse('${constants.url}/api/loyaltyData?id=${userJson['id']}');
         response = await http.get(url);
         var pointsJson = json.decode(response.body);
         userController.setUserData(
@@ -82,6 +99,7 @@ class Auth_Controller extends GetxController {
 
   void cerrarSesion() async {
     await instance.signOut();
+    userController.clearUser();
     update();
     Get.offNamed("/splash");
     Get.offNamed("/home");

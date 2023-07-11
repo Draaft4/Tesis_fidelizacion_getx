@@ -10,8 +10,6 @@ class PerfilPage extends GetView<PerfilController> {
   final PerfilController _perfilController = Get.put(PerfilController());
   final Auth_Controller _authController = Get.find();
   final UserController _userController = Get.find();
-  bool sesion = false;
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -27,10 +25,12 @@ class PerfilPage extends GetView<PerfilController> {
       backgroundColor: const Color.fromARGB(255, 200, 200, 200),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 77, 23, 4),
-        actions: [sesion ? botonCerrarSesion() : butonlogin()],
+        actions: [
+          _authController.isLogged.value ? botonCerrarSesion() : butonlogin()
+        ],
         title: const Text('Perfil'),
       ),
-      body: ListView(
+      body: Column(
         children: [
           const SizedBox(height: 15),
           const Center(
@@ -65,17 +65,22 @@ class PerfilPage extends GetView<PerfilController> {
             ),
             child: Column(
               children: [
-                labelUserData(
-                    "Identificación :", Icons.recent_actors, _userController.usuario.value.vat),
+                labelUserData("Identificación :", Icons.recent_actors,
+                    _userController.usuario.value.vat),
                 const SizedBox(height: 5),
                 labelUserData("Nombre Completo :", Icons.account_circle_rounded,
                     _userController.usuario.value.name),
                 const SizedBox(height: 5),
-                labelUserData("Número de telefono", Icons.phone, _userController.usuario.value.phone),
+                labelUserData("Número de telefono", Icons.phone,
+                    _userController.usuario.value.phone),
                 const SizedBox(height: 5),
-                labelUserData("Fecha de nacimiento", Icons.calendar_month, _userController.usuario.value.bithDate),
+                labelUserData("Fecha de nacimiento", Icons.calendar_month,
+                    _userController.usuario.value.bithDate),
                 const SizedBox(height: 5),
-                labelUserData("Correo Electronico", Icons.alternate_email_rounded, _userController.usuario.value.email),
+                labelUserData(
+                    "Correo Electronico",
+                    Icons.alternate_email_rounded,
+                    _userController.usuario.value.email),
                 const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
@@ -96,24 +101,18 @@ class PerfilPage extends GetView<PerfilController> {
             ),
           ),
           const SizedBox(height: 10),
-          cardCupon(
-              "1234",
-              "Nombre del Programa",
-              "2023-12-31",
-              Image.asset(
-                  "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png")),
-          cardCupon(
-              "crcce",
-              "dcefc",
-              "ff",
-              Image.asset(
-                  "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png")),
-          cardCupon(
-              "tome",
-              "si",
-              "vale",
-              Image.asset(
-                  "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"))
+          Expanded(
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: _userController.coupons.length,
+              itemBuilder: (context, index) => cardCupon(
+                  _userController.coupons[index]["code"],
+                  _userController.coupons[index]["program_name"],
+                  _userController.coupons[index]["fecha de expiracion"],
+                  Image.asset(
+                      "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png")),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(

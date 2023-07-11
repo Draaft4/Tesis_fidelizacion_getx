@@ -11,8 +11,6 @@ class LoginPage extends GetView<LoginController> {
 
   final LoginController _loginController = Get.put(LoginController());
 
-  final RegisterFormController _registerFormController =
-      Get.put(RegisterFormController());
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -175,7 +173,7 @@ class LoginPage extends GetView<LoginController> {
   GestureDetector botonFacebook() {
     return GestureDetector(
         onTap: () {
-          _registerFormController.formlog();
+          _loginController.formlog();
         },
         child: Container(
           width: 60,
@@ -190,7 +188,7 @@ class LoginPage extends GetView<LoginController> {
   GestureDetector botonGulugulu() {
     return GestureDetector(
         onTap: () {
-          _registerFormController.formlog();
+          _loginController.formlog();
         },
         child: Container(
           width: 60,

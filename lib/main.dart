@@ -44,10 +44,9 @@ void main() async {
     }
   });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  final fcmToken = await messaging.getToken();
-  print("token");
-  print(fcmToken);
-  authController.isInSession();
+  // final fcmToken = await messaging.getToken();
+  // print("token");
+  // print(fcmToken);
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     initialRoute: Routes.INITIAL,

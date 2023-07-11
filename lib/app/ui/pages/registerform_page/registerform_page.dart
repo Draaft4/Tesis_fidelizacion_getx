@@ -11,7 +11,7 @@ class RegisterFormPage extends GetView<RegisterFormController> {
   final TextEditingController _usernController = TextEditingController();
   final TextEditingController _phonenumberController =TextEditingController();
   final TextEditingController  _idecontroller = TextEditingController();
-  //final RegisterFormController _registerFormController=Get.put(RegisterFormController());
+  final RegisterFormController _registerFormController=Get.put(RegisterFormController());
   
   @override
   Widget build(BuildContext context) {
@@ -157,13 +157,14 @@ Container dateField(String val,bool pwd, IconData icono, TextEditingController c
       final DateFormat formatter =DateFormat('yyyy-MM-dd'); // Aquí puedes formatear la fecha según tus necesidades
       final String formattedDate =formatter.format(picked);
       controller.text=formattedDate;
+      
     }
   }
 
   GestureDetector botonlog(){
     return GestureDetector(
       onTap: (){
-       Get.offNamed('/home');
+        _registerFormController.register(_usernController.text, _idecontroller.text, _dateController.text, _phonenumberController.text);
       },
       child: Container(
         decoration: BoxDecoration(

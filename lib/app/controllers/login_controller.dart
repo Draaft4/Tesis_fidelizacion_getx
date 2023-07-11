@@ -25,4 +25,8 @@ class LoginController extends GetxController {
     Get.offNamed("/register");
   }
 
+  void formlog() async {
+    Get.offNamed("/registerform");
+  }
+
 }
