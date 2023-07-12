@@ -1,11 +1,10 @@
 import 'package:app_fidelizacion/app/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import '../../../controllers/perfil_controller.dart';
 import 'package:app_fidelizacion/app/controllers/auth_controller.dart';
-import '../../../controllers/home_controller.dart';
 
+// ignore: use_key_in_widget_constructors
 class PerfilPage extends GetView<PerfilController> {
   final PerfilController _perfilController = Get.put(PerfilController());
   final Auth_Controller _authController = Get.find();
@@ -256,7 +255,7 @@ class PerfilPage extends GetView<PerfilController> {
   GestureDetector botonUpdate() {
     return GestureDetector(
       onTap: () {
-        Get.offNamed('/registerform');
+        Get.offNamed('/update');
       },
       child: Container(
         decoration: BoxDecoration(

@@ -1,9 +1,11 @@
 import 'package:app_fidelizacion/app/constants/constants.dart';
 import 'package:app_fidelizacion/app/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:device_info_plus/device_info_plus.dart';
 
 // ignore: camel_case_types
 class Auth_Controller extends GetxController {
@@ -17,6 +19,7 @@ class Auth_Controller extends GetxController {
 
   Future<String> registerEmailPass(String email, String pass) async {
     try {
+      // ignore: unused_local_variable
       final credential = await instance.createUserWithEmailAndPassword(
         email: email,
         password: pass,
@@ -24,7 +27,6 @@ class Auth_Controller extends GetxController {
       var url = Uri.parse('${constants.url}/api/login?email=$email');
       var response = await http.get(url);
       var jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       if (jsonResponse["message"] == "error") {
         userController.setMail(email);
         Get.offNamed("/registerform");
@@ -83,6 +85,7 @@ class Auth_Controller extends GetxController {
             userJson['birth_date'],
             pointsJson[0]["points"]);
       }
+      // ignore: unused_local_variable
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pass);
     } on FirebaseAuthException catch (e) {
@@ -92,6 +95,7 @@ class Auth_Controller extends GetxController {
         return ('Wrong password provided for that user.');
       }
     }
+    registrarToken(userController.usuario.value.id);
     isLogged.value = true;
     update();
     return 'ok';
@@ -100,8 +104,36 @@ class Auth_Controller extends GetxController {
   void cerrarSesion() async {
     await instance.signOut();
     userController.clearUser();
-    update();
+    isLogged.value = false;
     Get.offNamed("/splash");
     Get.offNamed("/home");
+  }
+
+  // ignore: non_constant_identifier_names
+  void registrarToken(int res_partner) async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    final fcmToken = await messaging.getToken();
+    var url = Uri.parse('${constants.url}/api/checkToken');
+    var response = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+          <String, dynamic>{"partner_id": "$res_partner", "token": fcmToken},
+        ));
+    final body = json.decode(response.body);
+    if (body['success'] == false) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      var url = Uri.parse('${constants.url}/api/registerToken');
+      // ignore: unused_local_variable
+      var response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(
+            <String, dynamic>{"partner_id": "$res_partner", "token": fcmToken,"device_name":androidInfo.model},
+          ));
+    }
   }
 }

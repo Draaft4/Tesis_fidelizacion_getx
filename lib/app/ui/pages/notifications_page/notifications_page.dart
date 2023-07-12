@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/notifications_controller.dart';
 import 'package:app_fidelizacion/app/controllers/auth_controller.dart';
-import '../../../controllers/home_controller.dart';
 
+// ignore: must_be_immutable, use_key_in_widget_constructors
 class NotificationsPage extends GetView<NotificationsController> {
   final NotificationsController _notificationsController =
       Get.put(NotificationsController());

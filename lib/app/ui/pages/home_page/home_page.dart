@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../controllers/home_controller.dart';
 import 'dart:convert';
 
+// ignore: use_key_in_widget_constructors
 class HomePage extends GetView<HomeController> {
   final HomeController _homeController = Get.put(HomeController());
   final Auth_Controller _authController = Get.find();

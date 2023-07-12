@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-
+  final Auth_Controller _authController = Get.find();
   void login(String email, String pass)async {
-    String response = await Auth_Controller().loginEmailPass(email, pass);
+    String response = await _authController.loginEmailPass(email, pass);
     if(response!="ok"){
       Get.snackbar(
             'Error',

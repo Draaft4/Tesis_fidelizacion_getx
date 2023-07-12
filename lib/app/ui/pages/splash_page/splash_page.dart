@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import '../../../controllers/splash_controller.dart';
 
 
+// ignore: use_key_in_widget_constructors
 class SplashPage extends StatelessWidget {
+  // ignore: unused_field
   final SplashController _splashController = Get.put(SplashController());
   @override
   Widget build(BuildContext context) {

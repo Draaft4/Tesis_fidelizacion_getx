@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/register_controller.dart';
 
+// ignore: use_key_in_widget_constructors
 class RegisterPage extends GetView<RegisterController> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();

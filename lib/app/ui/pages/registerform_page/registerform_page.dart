@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../controllers/registerform_controller.dart';
 
 
+// ignore: use_key_in_widget_constructors
 class RegisterFormPage extends GetView<RegisterFormController> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _usernController = TextEditingController();

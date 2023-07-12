@@ -24,6 +24,5 @@ class NotificationsController extends GetxController {
         .get();
     List<QueryDocumentSnapshot> documents = querySnapshot.docs;
     notificaciones.value = documents;
-    print("actualizando");
   }
 }

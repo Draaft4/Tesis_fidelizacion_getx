@@ -9,5 +9,6 @@ abstract class Routes{
   static const REGISTERFORM ='/registerform';
   static const PERFIL='/perfil';
   static const NOTIFICATIONS='/notifications';
+  static const UPDATE_USER = '/update';
   
 }

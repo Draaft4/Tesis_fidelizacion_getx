@@ -21,6 +21,7 @@ void main() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final UserController userController = Get.put(UserController(), permanent: true);
+  // ignore: unused_local_variable
   final Auth_Controller authController = Get.put(Auth_Controller(), permanent: true);
   // ignore: unused_local_variable
   NotificationSettings settings = await messaging.requestPermission(
@@ -45,7 +46,6 @@ void main() async {
   });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // final fcmToken = await messaging.getToken();
-  // print("token");
   // print(fcmToken);
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,

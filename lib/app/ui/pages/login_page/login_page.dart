@@ -1,10 +1,9 @@
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/login_controller.dart';
-import '../../../controllers/registerform_controller.dart';
 
+// ignore: use_key_in_widget_constructors
 class LoginPage extends GetView<LoginController> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
