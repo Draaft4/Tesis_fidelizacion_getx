@@ -9,6 +9,8 @@ class HomePage extends GetView<HomeController> {
   final HomeController _homeController = Get.put(HomeController());
   final Auth_Controller _authController = Get.find();
 
+  final _isDialogVisible = false.obs;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,26 +77,36 @@ class HomePage extends GetView<HomeController> {
             ),
             const SizedBox(height: 15),
             Expanded(
-              child: ListView.builder(
-                itemCount: _homeController.productos.length,
-                itemBuilder: (context, index) {
-                  final producto = _homeController.productos[index];
-                  return cardPromociones(
-                    producto['description'],
-                    producto['required_points'],
-                    producto['reward_type'],
-                    producto['quantity'],
-                    Image.memory(base64Decode(producto['base64'])),
-                  );
-                },
-              ),
+              child: Obx(() => ListView.builder(
+                    itemCount: _homeController.productos.length,
+                    itemBuilder: (context, index) {
+                      final producto = _homeController.productos[index];
+                      if (producto['base64'] != null) {
+                        return cardPromociones(
+                          producto['description'],
+                          producto['required_points'],
+                          producto['reward_type'],
+                          Image.memory(base64Decode(producto['base64'])),
+                        );
+                      } else {
+                        return cardPromociones(
+                          producto['description'],
+                          producto['required_points'],
+                          producto['reward_type'],
+                          Image.asset(
+                              "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
+                        );
+                      }
+                    },
+                  )),
             ),
             const SizedBox(height: 15),
-            const Center(
-                child: Text(
-              "Obtén 10 puntos por cada compra que realices",
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-            ))
+            ElevatedButton(
+                onPressed: () {
+                  _showDialog();
+                  _isDialogVisible.value = true;
+                },
+                child: const Text('Condiciones para ganar puntos'))
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -129,26 +141,37 @@ class HomePage extends GetView<HomeController> {
           ),
           const SizedBox(height: 15),
           Expanded(
-            child: ListView.builder(
+              child: Obx(
+            () => ListView.builder(
               itemCount: _homeController.productos.length,
               itemBuilder: (context, index) {
                 final producto = _homeController.productos[index];
-                return cardPromociones(
-                  producto['description'],
-                  producto['required_points'],
-                  producto['reward_type'],
-                  producto['quantity'],
-                  Image.memory(base64Decode(producto['base64'])),
-                );
+                if (producto['base64'] != null) {
+                  return cardPromociones(
+                    producto['description'],
+                    producto['required_points'],
+                    producto['reward_type'],
+                    Image.memory(base64Decode(producto['base64'])),
+                  );
+                } else {
+                  return cardPromociones(
+                    producto['description'],
+                    producto['required_points'],
+                    producto['reward_type'],
+                    Image.asset(
+                        "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
+                  );
+                }
               },
             ),
-          ),
+          )),
           const SizedBox(height: 15),
-          const Center(
-              child: Text(
-            "Obtén 10 puntos por cada compra que realices",
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-          ))
+          ElevatedButton(
+              onPressed: () {
+                _showDialog();
+                _isDialogVisible.value = true;
+              },
+              child: const Text('Condiciones para ganar puntos'))
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -169,40 +192,83 @@ class HomePage extends GetView<HomeController> {
     String description,
     double requiredPoints,
     String rewardType,
-    int quantity,
     Image imagen,
   ) {
     return Card(
-      child: Column(
-        children: [
-          ListTile(
-            leading: SizedBox(
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(color: Colors.black, width: 2.0),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            SizedBox(
               height: 90,
               width: 90,
               child: imagen,
             ),
-            title: Text(description),
-            onTap: () {
-              _homeController.isExpanded.toggle();
-            },
-          ),
-          Obx(() {
-            return Visibility(
-              visible: _homeController.isExpanded.value,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Puntos Requeridos: $requiredPoints'),
-                    Text('Tipo de Recompensa: $rewardType'),
-                    Text('Cantidad: $quantity'),
-                  ],
-                ),
+            const SizedBox(width: 16.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(description),
+                  Text('Puntos Requeridos: $requiredPoints'),
+                  Text('Tipo de Recompensa: $rewardType'),
+                ],
               ),
-            );
-          }),
-        ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDialog() {
+    Get.defaultDialog(
+        title: "Condiciones para ganar puntos",
+        content: Expanded(
+              child: ListView.builder(
+                  itemCount: _homeController.condiciones.length,
+                  itemBuilder: (context, index) {
+                    final condicion = _homeController.condiciones[index];
+                    return cardCondiciones(condicion['minimum_qty'],condicion['minimum_amount'],condicion['reward_point_amount']);
+                  })),
+        radius: 30);
+  }
+
+  Card cardCondiciones(
+      int minimun_qty, double minimum_amount, double reward_point_amount) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(color: Colors.black, width: 2.0),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Por una compra mínima de: $minimun_qty"),
+                  Text("Por un gasto mínimo de: $minimum_amount"),
+                  Text("Gana $reward_point_amount puntos.")
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

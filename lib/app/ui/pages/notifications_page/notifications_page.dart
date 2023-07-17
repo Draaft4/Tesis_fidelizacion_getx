@@ -33,7 +33,9 @@ class NotificationsPage extends GetView<NotificationsController> {
       backgroundColor: const Color.fromARGB(255, 200, 200, 200),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 77, 23, 4),
-        actions: [_authController.isLogged.value ? botonCerrarSesion() : butonlogin()],
+        actions: [
+          _authController.isLogged.value ? botonCerrarSesion() : butonlogin()
+        ],
         title: const Text('Notificaciones'),
       ),
       body: RefreshIndicator(
@@ -55,7 +57,8 @@ class NotificationsPage extends GetView<NotificationsController> {
               height: 15,
             ),
             Expanded(
-              child: ListView.separated(
+                child: Obx(
+              () => ListView.separated(
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: _notificationsController.notificaciones.length,
                 itemBuilder: (context, index) => cardNotificacion(
@@ -67,7 +70,7 @@ class NotificationsPage extends GetView<NotificationsController> {
                       .toString(),
                 ),
               ),
-            ),
+            )),
           ])),
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 200, 200, 200),
@@ -165,9 +168,9 @@ class NotificationsPage extends GetView<NotificationsController> {
   GestureDetector botonperfil() {
     return GestureDetector(
       onTap: () {
-        if(_authController.isLogged.value){
+        if (_authController.isLogged.value) {
           Get.offNamed("/perfil");
-        }else{
+        } else {
           _notificationsController.initLogin();
         }
       },

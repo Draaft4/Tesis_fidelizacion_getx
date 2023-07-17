@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class UserController extends GetxController {
-  Rx<User> usuario = User(0, '', '', '', '', '',0).obs;
+  Rx<User> usuario = User(0, '', '', '', '', '', 0).obs;
 
   Constants constants = Constants();
 
@@ -13,17 +13,17 @@ class UserController extends GetxController {
 
   List<dynamic> coupons = [].obs;
 
-  void clearUser(){
-    usuario = User(0, '', '', '', '', '',0).obs;
+  void clearUser() {
+    usuario = User(0, '', '', '', '', '', 0).obs;
   }
 
-  void setMail(String email){
+  void setMail(String email) {
     usuario.value.email = email;
   }
 
   void setUserData(int id, String name, String email, String vat, String phone,
       String birthDate, double points) {
-        this.id = id;
+    this.id = id;
     usuario.value.id = id;
     usuario.value.name = name;
     usuario.value.email = email;
@@ -35,8 +35,28 @@ class UserController extends GetxController {
   }
 
   void getCupondata() async {
-  final response = await http.get(Uri.parse('${constants.url}/api/coupons?id=47'));
+    final response =
+        await http.get(Uri.parse('${constants.url}/api/coupons?id=${usuario.value.id}'));
     final List<dynamic> jsonResponse = json.decode(response.body);
     coupons = jsonResponse;
-}
+  }
+
+  Future<void> updateData() async {
+    var url = Uri.parse('${constants.url}/api/clientData?id=${usuario.value.id}');
+    var response = await http.get(url);
+    var userJson = json.decode(response.body);
+    url =
+            Uri.parse('${constants.url}/api/loyaltyData?id=${userJson['id']}');
+        response = await http.get(url);
+        var pointsJson = json.decode(response.body);
+    setUserData(
+            userJson['id'],
+            userJson['name'],
+            userJson['email'],
+            userJson['vat'],
+            userJson['phone'],
+            userJson['birth_date'],
+            pointsJson[0]["points"]);
+    getCupondata();
+  }
 }

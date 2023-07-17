@@ -43,7 +43,7 @@ class PerfilPage extends GetView<PerfilController> {
           ),
           const SizedBox(height: 15),
           Center(
-            child: points("${_userController.usuario.value.points}"),
+            child: Obx(() => points("${_userController.usuario.value.points}")),
           ),
           const SizedBox(height: 15),
           const Center(
