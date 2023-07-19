@@ -223,9 +223,9 @@ class UserDataUpdatePage extends GetView<UserDataUpdateController> {
           child: const Align(
               alignment: Alignment.center,
               child: Icon(
-                Icons.assignment_return_outlined,
+                Icons.login,
                 color: Colors.white,
-                size: 70,
+                size: 35,
               ))),
     );
   }

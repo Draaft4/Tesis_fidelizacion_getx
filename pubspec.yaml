@@ -34,4 +34,7 @@ flutter:
   assets:
     - static/
 
-  
+  fonts:
+    - family: Monserrat
+      fonts:
+        - asset: static/fonts/Montserrat-VariableFont_wght.ttf

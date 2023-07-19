@@ -15,6 +15,12 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Center(
+            child: Image.asset(
+          'static/1981-removebg-preview.png',
+          width: 180,
+          height: 180,
+        )),
         backgroundColor: const Color.fromARGB(255, 77, 23, 4),
         actions: [
           _authController.isLogged.value ? botonCerrarSesion() : botonLogin()
@@ -56,7 +62,7 @@ class HomePage extends GetView<HomeController> {
         onPressed: () {
           _homeController.initLogin();
         },
-        icon: const Icon(Icons.login));
+        icon: const Icon(Icons.account_circle));
   }
 
   Widget mainSesion() => Scaffold(
@@ -85,14 +91,12 @@ class HomePage extends GetView<HomeController> {
                         return cardPromociones(
                           producto['description'],
                           producto['required_points'],
-                          producto['reward_type'],
                           Image.memory(base64Decode(producto['base64'])),
                         );
                       } else {
                         return cardPromociones(
                           producto['description'],
                           producto['required_points'],
-                          producto['reward_type'],
                           Image.asset(
                               "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
                         );
@@ -101,12 +105,20 @@ class HomePage extends GetView<HomeController> {
                   )),
             ),
             const SizedBox(height: 15),
-            ElevatedButton(
-                onPressed: () {
-                  _showDialog();
-                  _isDialogVisible.value = true;
-                },
-                child: const Text('Condiciones para ganar puntos'))
+            TextButton(
+              onPressed: () {
+                _showDialog();
+                _isDialogVisible.value = true;
+              },
+              child: const Text(
+                'Condiciones para ganar puntos',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.brown,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -150,14 +162,12 @@ class HomePage extends GetView<HomeController> {
                   return cardPromociones(
                     producto['description'],
                     producto['required_points'],
-                    producto['reward_type'],
                     Image.memory(base64Decode(producto['base64'])),
                   );
                 } else {
                   return cardPromociones(
                     producto['description'],
                     producto['required_points'],
-                    producto['reward_type'],
                     Image.asset(
                         "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
                   );
@@ -166,12 +176,20 @@ class HomePage extends GetView<HomeController> {
             ),
           )),
           const SizedBox(height: 15),
-          ElevatedButton(
-              onPressed: () {
-                _showDialog();
-                _isDialogVisible.value = true;
-              },
-              child: const Text('Condiciones para ganar puntos'))
+          TextButton(
+            onPressed: () {
+              _showDialog();
+              _isDialogVisible.value = true;
+            },
+            child: const Text(
+              'Condiciones para ganar puntos',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.brown,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -191,7 +209,6 @@ class HomePage extends GetView<HomeController> {
   Card cardPromociones(
     String description,
     double requiredPoints,
-    String rewardType,
     Image imagen,
   ) {
     return Card(
@@ -217,9 +234,18 @@ class HomePage extends GetView<HomeController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(description),
-                  Text('Puntos Requeridos: $requiredPoints'),
-                  Text('Tipo de Recompensa: $rewardType'),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Puntos Requeridos: $requiredPoints',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -232,18 +258,31 @@ class HomePage extends GetView<HomeController> {
   void _showDialog() {
     Get.defaultDialog(
         title: "Condiciones para ganar puntos",
-        content: Expanded(
-              child: ListView.builder(
-                  itemCount: _homeController.condiciones.length,
-                  itemBuilder: (context, index) {
-                    final condicion = _homeController.condiciones[index];
-                    return cardCondiciones(condicion['minimum_qty'],condicion['minimum_amount'],condicion['reward_point_amount']);
-                  })),
+        titleStyle: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+        content: SizedBox(
+            height: 200,
+            child: ListView.builder(
+                itemCount: _homeController.condiciones.length,
+                itemBuilder: (context, index) {
+                  final condicion = _homeController.condiciones[index];
+                  return cardCondiciones(
+                      condicion['minimum_qty'],
+                      condicion['minimum_amount'],
+                      condicion['reward_point_amount']);
+                })),
         radius: 30);
   }
 
   Card cardCondiciones(
-      int minimun_qty, double minimum_amount, double reward_point_amount) {
+      // ignore: non_constant_identifier_names
+      int minimun_qty,
+      // ignore: non_constant_identifier_names
+      double minimum_amount,
+      // ignore: non_constant_identifier_names
+      double reward_point_amount) {
     return Card(
       shape: RoundedRectangleBorder(
         side: const BorderSide(color: Colors.black, width: 2.0),
@@ -261,9 +300,24 @@ class HomePage extends GetView<HomeController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Por una compra mínima de: $minimun_qty"),
-                  Text("Por un gasto mínimo de: $minimum_amount"),
-                  Text("Gana $reward_point_amount puntos.")
+                  Text(
+                    "Por una compra mínima de: $minimun_qty",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "Por un gasto mínimo de: $minimum_amount",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "Gana $reward_point_amount puntos.",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -294,7 +348,7 @@ class HomePage extends GetView<HomeController> {
             Icon(Icons.notifications),
             Text('Notificaciones',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: FontWeight.bold,
                 ))
           ],
@@ -321,7 +375,7 @@ class HomePage extends GetView<HomeController> {
             Icon(Icons.home),
             Text('Inicio',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: FontWeight.bold,
                 ))
           ],
@@ -352,7 +406,7 @@ class HomePage extends GetView<HomeController> {
             Icon(Icons.account_circle),
             Text('Perfil',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: FontWeight.bold,
                 ))
           ],

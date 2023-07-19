@@ -47,7 +47,7 @@ class LoginPage extends GetView<LoginController> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Card(
-                  color: Colors.transparent,
+                  color: const Color.fromARGB(70, 0, 0, 0),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -55,7 +55,7 @@ class LoginPage extends GetView<LoginController> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Center(child: labelLogin('Inicio de Sesión')),
+                            const SizedBox(height: 10,),
                             Center(
                               child: Image.asset(
                                 'static/coffee-cup.png',
@@ -95,10 +95,6 @@ class LoginPage extends GetView<LoginController> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 botonRegisterInEmail(),
-                                const SizedBox(width: 10),
-                                botonFacebook(),
-                                const SizedBox(width: 10),
-                                botonGulugulu(),
                               ],
                             ),
                             Center(child: botonback()),
@@ -136,17 +132,6 @@ class LoginPage extends GetView<LoginController> {
           hintText: val,
           hintStyle: const TextStyle(color: Colors.white),
         ),
-      ),
-    );
-  }
-
-  Text labelLogin(String val) {
-    return Text(
-      val,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -235,7 +220,7 @@ class LoginPage extends GetView<LoginController> {
           width: 50,
           height: 50,
           child: Icon(
-            Icons.replay,
+            Icons.login,
             color: Colors.white,
           )),
     );

@@ -41,7 +41,6 @@ class HomeController extends GetxController {
           List<Map<String, dynamic>>.from(jsonResponse);
       for (var element in rules) {
         condiciones.add(element);
-        print(element);
       }
     }
   }

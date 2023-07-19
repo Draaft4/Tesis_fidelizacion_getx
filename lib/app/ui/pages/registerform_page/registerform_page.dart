@@ -33,7 +33,6 @@ class RegisterFormPage extends GetView<RegisterFormController> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      
                       Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
@@ -194,7 +193,6 @@ Container dateField(String val,bool pwd, IconData icono, TextEditingController c
         Get.offNamed('/login');
       },
       child: Container(
-
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), 
@@ -202,7 +200,7 @@ Container dateField(String val,bool pwd, IconData icono, TextEditingController c
           child:const Align(
             alignment: Alignment.center,
          child: Icon(
-          Icons.assignment_return_outlined,
+          Icons.login,
           color: Colors.white,
           size: 70,
          )

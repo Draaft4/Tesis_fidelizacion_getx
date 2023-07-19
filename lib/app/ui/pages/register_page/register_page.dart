@@ -171,7 +171,7 @@ class RegisterPage extends GetView<RegisterController> {
          child: const Align(
               alignment: Alignment.center,
               child: Icon(
-            Icons.replay,
+            Icons.login,
             color:Colors.white,
             size:70
               ),

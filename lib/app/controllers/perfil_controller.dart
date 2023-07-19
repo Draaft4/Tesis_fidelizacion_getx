@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class PerfilController extends GetxController {
 
-  UserController _userController = Get.find();
+  final UserController _userController = Get.find();
 
 
    @override

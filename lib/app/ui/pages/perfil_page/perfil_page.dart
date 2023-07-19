@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:app_fidelizacion/app/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,10 +21,27 @@ class PerfilPage extends GetView<PerfilController> {
     );
   }
 
+  BackdropFilter backgroundFilter() {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.0),
+        ),
+      ),
+    );
+  }
+
   Widget content() {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 200, 200, 200),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading: Center(
+            child: Image.asset(
+          'static/1981-removebg-preview.png',
+          width: 180,
+          height: 180,
+        )),
         backgroundColor: const Color.fromARGB(255, 77, 23, 4),
         actions: [
           _authController.isLogged.value ? botonCerrarSesion() : butonlogin()
@@ -145,7 +164,7 @@ class PerfilPage extends GetView<PerfilController> {
         onPressed: () {
           _perfilController.initLogin();
         },
-        icon: const Icon(Icons.login));
+        icon: const Icon(Icons.account_circle));
   }
 
   Text points(String val) {
@@ -172,7 +191,7 @@ class PerfilPage extends GetView<PerfilController> {
             Text('Notificaciones',
                 style: TextStyle(
                   fontSize:
-                      12, // Ajusta el tamaño de fuente según tu preferencia
+                      10, // Ajusta el tamaño de fuente según tu preferencia
                   fontWeight: FontWeight.bold,
                 ))
           ],
@@ -200,7 +219,7 @@ class PerfilPage extends GetView<PerfilController> {
             Text('Inicio',
                 style: TextStyle(
                   fontSize:
-                      12, // Ajusta el tamaño de fuente según tu preferencia
+                      10, // Ajusta el tamaño de fuente según tu preferencia
                   fontWeight: FontWeight.bold,
                 ))
           ],
@@ -269,7 +288,7 @@ class PerfilPage extends GetView<PerfilController> {
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
             ),
           ),
         )),
@@ -301,7 +320,20 @@ class PerfilPage extends GetView<PerfilController> {
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text(code), Text(progName), Text(expiration)],
+              children: [
+                Text("Codigo del cupón: $code",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )),
+                Text(progName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )),
+                Text("Fecha de Expiración: $expiration",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ))
+              ],
             ))
           ],
         ),

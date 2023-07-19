@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/notifications_controller.dart';
 import 'package:app_fidelizacion/app/controllers/auth_controller.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class NotificationsPage extends GetView<NotificationsController> {
@@ -32,6 +33,12 @@ class NotificationsPage extends GetView<NotificationsController> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 200, 200, 200),
       appBar: AppBar(
+        leading: Center(
+            child: Image.asset(
+          'static/1981-removebg-preview.png',
+          width: 180,
+          height: 180,
+        )),
         backgroundColor: const Color.fromARGB(255, 77, 23, 4),
         actions: [
           _authController.isLogged.value ? botonCerrarSesion() : butonlogin()
@@ -64,10 +71,9 @@ class NotificationsPage extends GetView<NotificationsController> {
                 itemBuilder: (context, index) => cardNotificacion(
                   "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["title"]}",
                   "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["message"]}",
-                  (_notificationsController.notificaciones[index].data()
+                  DateFormat('dd-MM-yyyy').format((_notificationsController.notificaciones[index].data()
                           as Map<String, dynamic>)["date"]
-                      .toDate()
-                      .toString(),
+                      .toDate()),
                 ),
               ),
             )),
@@ -86,9 +92,24 @@ class NotificationsPage extends GetView<NotificationsController> {
       String valtitle, String valDescriptions, String valdate) {
     return Card(
       child: ListTile(
-        title: Text(valtitle),
-        subtitle: Text(valDescriptions),
-        trailing: Text(valdate),
+        title: Text(
+          valtitle,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Text(
+          valDescriptions,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        trailing: Text(
+          valdate,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
@@ -107,7 +128,7 @@ class NotificationsPage extends GetView<NotificationsController> {
         onPressed: () {
           _notificationsController.initLogin();
         },
-        icon: const Icon(Icons.login));
+        icon: const Icon(Icons.account_circle));
   }
 
   GestureDetector botonnotif() {
@@ -128,7 +149,7 @@ class NotificationsPage extends GetView<NotificationsController> {
             Text('Notificaciones',
                 style: TextStyle(
                   fontSize:
-                      12, // Ajusta el tamaño de fuente según tu preferencia
+                      10, // Ajusta el tamaño de fuente según tu preferencia
                   fontWeight: FontWeight.bold,
                 ))
           ],
@@ -156,7 +177,7 @@ class NotificationsPage extends GetView<NotificationsController> {
             Text('Inicio',
                 style: TextStyle(
                   fontSize:
-                      12, // Ajusta el tamaño de fuente según tu preferencia
+                      10, // Ajusta el tamaño de fuente según tu preferencia
                   fontWeight: FontWeight.bold,
                 ))
           ],
