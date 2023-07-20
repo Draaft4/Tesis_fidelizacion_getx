@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:app_fidelizacion/app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,12 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [background(), backgroundFilter(), content()],
+    );
+  }
+
+  Scaffold content() {
     return Scaffold(
       appBar: AppBar(
         leading: Center(
@@ -21,19 +29,51 @@ class HomePage extends GetView<HomeController> {
           width: 180,
           height: 180,
         )),
-        backgroundColor: const Color.fromARGB(255, 77, 23, 4),
+        backgroundColor: const Color.fromARGB(255, 140, 60, 30),
         actions: [
           _authController.isLogged.value ? botonCerrarSesion() : botonLogin()
         ],
         title: const Text('Promociones'),
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        margin: const EdgeInsets.only(top: 40),
-        child: _authController.isLogged.value ? mainSesion() : mainNoSesion(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+            color: Colors.brown[300],
+            child:
+                _authController.isLogged.value ? mainSesion() : mainNoSesion()),
       ),
-      backgroundColor: const Color.fromARGB(255, 200, 200, 200),
+      backgroundColor: Colors.transparent,
+      bottomNavigationBar: BottomAppBar(
+        color: const Color.fromARGB(255, 200, 200, 200),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            botonHome(),
+            botonnotif(),
+            botonperfil(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  BackdropFilter backgroundFilter() {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.0),
+        ),
+      ),
+    );
+  }
+
+  Container background() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage("static/splash.jpeg"), fit: BoxFit.cover),
+      ),
     );
   }
 
@@ -65,80 +105,38 @@ class HomePage extends GetView<HomeController> {
         icon: const Icon(Icons.account_circle));
   }
 
-  Widget mainSesion() => Scaffold(
-        backgroundColor: const Color.fromARGB(255, 200, 200, 200),
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            const Center(
-              child: Text(
-                "Promociones Canjeables",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            Expanded(
-              child: Obx(() => ListView.builder(
-                    itemCount: _homeController.productos.length,
-                    itemBuilder: (context, index) {
-                      final producto = _homeController.productos[index];
-                      if (producto['base64'] != null) {
-                        return cardPromociones(
-                          producto['description'],
-                          producto['required_points'],
-                          Image.memory(base64Decode(producto['base64'])),
-                        );
-                      } else {
-                        return cardPromociones(
-                          producto['description'],
-                          producto['required_points'],
-                          Image.asset(
-                              "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
-                        );
-                      }
-                    },
-                  )),
-            ),
-            const SizedBox(height: 15),
-            TextButton(
-              onPressed: () {
-                _showDialog();
-                _isDialogVisible.value = true;
-              },
-              child: const Text(
-                'Condiciones para ganar puntos',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.brown,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          ],
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: const Color.fromARGB(255, 200, 200, 200),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              botonHome(),
-              botonnotif(),
-              botonperfil(),
-            ],
-          ),
-        ),
-      );
-
-  Widget mainNoSesion() {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 200, 200, 200),
-      body: Column(
+  Widget mainSesion() => ListView(
         children: [
+          const SizedBox(height: 20),
+          const Center(
+            child: Text(
+              "Ofertas de Temporada",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 200,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                const SizedBox(width: 3),
+                cardTemporada(Image.asset("static/Cafecitos-01.jpg")),
+                const SizedBox(width: 3),
+                cardTemporada(Image.asset("static/Cafecitos-02.jpg")),
+                const SizedBox(width: 3),
+                cardTemporada(Image.asset("static/Cafecitos-03.jpg")),
+                const SizedBox(width: 3),
+                cardTemporada(Image.asset("static/Cafecitos-04.jpg")),
+                const SizedBox(width: 3),
+                cardTemporada(Image.asset("static/Cafecitos-05.jpg")),
+                const SizedBox(width: 3),
+              ],
+            ),
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -151,30 +149,30 @@ class HomePage extends GetView<HomeController> {
               ),
             ),
           ),
-          const SizedBox(height: 15),
-          Expanded(
-              child: Obx(
-            () => ListView.builder(
-              itemCount: _homeController.productos.length,
-              itemBuilder: (context, index) {
-                final producto = _homeController.productos[index];
-                if (producto['base64'] != null) {
-                  return cardPromociones(
-                    producto['description'],
-                    producto['required_points'],
-                    Image.memory(base64Decode(producto['base64'])),
-                  );
-                } else {
-                  return cardPromociones(
-                    producto['description'],
-                    producto['required_points'],
-                    Image.asset(
-                        "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
-                  );
-                }
-              },
-            ),
-          )),
+          Obx(() => SizedBox(
+                height: 130 * _homeController.productos.length.toDouble(),
+                child: ListView.builder(
+                  itemCount: _homeController.productos.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final producto = _homeController.productos[index];
+                    if (producto['base64'] != null) {
+                      return cardPromociones(
+                        producto['description'],
+                        producto['required_points'],
+                        Image.memory(base64Decode(producto['base64'])),
+                      );
+                    } else {
+                      return cardPromociones(
+                        producto['description'],
+                        producto['required_points'],
+                        Image.asset(
+                            "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
+                      );
+                    }
+                  },
+                ),
+              )),
           const SizedBox(height: 15),
           TextButton(
             onPressed: () {
@@ -191,17 +189,110 @@ class HomePage extends GetView<HomeController> {
             ),
           )
         ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: const Color.fromARGB(255, 200, 200, 200),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            botonHome(),
-            botonnotif(),
-            botonperfil(),
-          ],
+      );
+
+  Widget mainNoSesion() {
+    return ListView(
+      children: [
+        const SizedBox(height: 20),
+        const Center(
+          child: Text(
+            "Ofertas de Temporada",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
+        const SizedBox(height: 20),
+        SizedBox(
+          height: 200,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              const SizedBox(width: 10),
+              cardTemporada(Image.asset("static/Cafecitos-01.jpg")),
+              const SizedBox(width: 10),
+              cardTemporada(Image.asset("static/Cafecitos-02.jpg")),
+              const SizedBox(width: 10),
+              cardTemporada(Image.asset("static/Cafecitos-03.jpg")),
+              const SizedBox(width: 10),
+              cardTemporada(Image.asset("static/Cafecitos-04.jpg")),
+              const SizedBox(width: 10),
+              cardTemporada(Image.asset("static/Cafecitos-05.jpg")),
+              const SizedBox(width: 10),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        const Center(
+          child: Text(
+            "Promociones Canjeables",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Obx(() => SizedBox(
+              height: 130 * _homeController.productos.length.toDouble(),
+              child: ListView.builder(
+                itemCount: _homeController.productos.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final producto = _homeController.productos[index];
+                  if (producto['base64'] != null) {
+                    return cardPromociones(
+                      producto['description'],
+                      producto['required_points'],
+                      Image.memory(base64Decode(producto['base64'])),
+                    );
+                  } else {
+                    return cardPromociones(
+                      producto['description'],
+                      producto['required_points'],
+                      Image.asset(
+                          "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
+                    );
+                  }
+                },
+              ),
+            )),
+        const SizedBox(height: 15),
+        Center(
+          child: TextButton(
+            onPressed: () {
+              _showDialog();
+              _isDialogVisible.value = true;
+            },
+            child: const Text(
+              'Condiciones para ganar puntos',
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration
+                      .underline, // Agrega una línea debajo del texto
+                  decorationThickness: 0.5),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Card cardTemporada(Image imagen) {
+    return Card(
+      color: Colors.brown[300],
+      child: SizedBox(
+        height: 77,
+        width: 322,
+        child: imagen,
       ),
     );
   }

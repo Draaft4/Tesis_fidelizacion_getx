@@ -16,6 +16,7 @@ class PerfilPage extends GetView<PerfilController> {
     return Stack(
       children: [
         background(),
+        backgroundFilter(),
         content(),
       ],
     );
@@ -23,7 +24,7 @@ class PerfilPage extends GetView<PerfilController> {
 
   BackdropFilter backgroundFilter() {
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.0),
@@ -42,96 +43,106 @@ class PerfilPage extends GetView<PerfilController> {
           width: 180,
           height: 180,
         )),
-        backgroundColor: const Color.fromARGB(255, 77, 23, 4),
+        backgroundColor: const Color.fromARGB(255, 140, 60, 30),
         actions: [
           _authController.isLogged.value ? botonCerrarSesion() : butonlogin()
         ],
         title: const Text('Perfil'),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 15),
-          const Center(
-            child: Text(
-              "Tus Puntos son:",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 15),
-          Center(
-            child: Obx(() => points("${_userController.usuario.value.points}")),
-          ),
-          const SizedBox(height: 15),
-          const Center(
-            child: Text(
-              "Datos Personales",
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              children: [
-                labelUserData("Identificación :", Icons.recent_actors,
-                    _userController.usuario.value.vat),
-                const SizedBox(height: 5),
-                labelUserData("Nombre Completo :", Icons.account_circle_rounded,
-                    _userController.usuario.value.name),
-                const SizedBox(height: 5),
-                labelUserData("Número de telefono", Icons.phone,
-                    _userController.usuario.value.phone),
-                const SizedBox(height: 5),
-                labelUserData("Fecha de nacimiento", Icons.calendar_month,
-                    _userController.usuario.value.bithDate),
-                const SizedBox(height: 5),
-                labelUserData(
-                    "Correo Electronico",
-                    Icons.alternate_email_rounded,
-                    _userController.usuario.value.email),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  height: 40,
-                  child: botonUpdate(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          color: Colors.brown[300],
+          child: Column(
+            children: [
+              const SizedBox(height: 15),
+              const Center(
+                child: Text(
+                  "Tus Puntos son:",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          const Center(
-            child: Text(
-              "Cupones Obtenidos",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
               ),
-            ),
+              const SizedBox(height: 15),
+              Center(
+                child: Obx(
+                    () => points("${_userController.usuario.value.points}")),
+              ),
+              const SizedBox(height: 15),
+              const Center(
+                child: Text(
+                  "Datos Personales",
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    labelUserData("Identificación :", Icons.recent_actors,
+                        _userController.usuario.value.vat),
+                    const SizedBox(height: 5),
+                    labelUserData(
+                        "Nombre Completo :",
+                        Icons.account_circle_rounded,
+                        _userController.usuario.value.name),
+                    const SizedBox(height: 5),
+                    labelUserData("Número de telefono", Icons.phone,
+                        _userController.usuario.value.phone),
+                    const SizedBox(height: 5),
+                    labelUserData("Fecha de nacimiento", Icons.calendar_month,
+                        _userController.usuario.value.bithDate),
+                    const SizedBox(height: 5),
+                    labelUserData("Correo Electronico:",
+                        Icons.alternate_email_rounded, ""),
+                    Text(_userController.usuario.value.email,
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 40,
+                      child: botonUpdate(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Center(
+                child: Text(
+                  "Cupones Obtenidos",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemCount: _userController.coupons.length,
+                  itemBuilder: (context, index) => cardCupon(
+                      _userController.coupons[index]["code"],
+                      _userController.coupons[index]["program_name"],
+                      _userController.coupons[index]["fecha de expiracion"],
+                      Image.asset(
+                          "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png")),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: ListView.separated(
-              separatorBuilder: (context, index) => const Divider(),
-              itemCount: _userController.coupons.length,
-              itemBuilder: (context, index) => cardCupon(
-                  _userController.coupons[index]["code"],
-                  _userController.coupons[index]["program_name"],
-                  _userController.coupons[index]["fecha de expiracion"],
-                  Image.asset(
-                      "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png")),
-            ),
-          ),
-        ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 200, 200, 200),
@@ -145,8 +156,10 @@ class PerfilPage extends GetView<PerfilController> {
 
   Container background() {
     return Container(
-      decoration:
-          const BoxDecoration(color: Color.fromARGB(255, 200, 200, 200)),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage("static/splash.jpeg"), fit: BoxFit.cover),
+      ),
     );
   }
 

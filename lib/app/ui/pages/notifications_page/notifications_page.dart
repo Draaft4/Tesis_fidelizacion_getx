@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/notifications_controller.dart';
@@ -14,7 +16,27 @@ class NotificationsPage extends GetView<NotificationsController> {
   Widget build(BuildContext context) {
     updateList();
     return Stack(
-      children: [background(), content()],
+      children: [background(), backgroundFilter(), content()],
+    );
+  }
+
+  BackdropFilter backgroundFilter() {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.0),
+        ),
+      ),
+    );
+  }
+
+  Container background() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage("static/splash.jpeg"), fit: BoxFit.cover),
+      ),
     );
   }
 
@@ -22,16 +44,9 @@ class NotificationsPage extends GetView<NotificationsController> {
     await _notificationsController.getNotifications();
   }
 
-  Container background() {
-    return Container(
-      decoration:
-          const BoxDecoration(color: Color.fromARGB(255, 200, 200, 200)),
-    );
-  }
-
   Widget content() {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 200, 200, 200),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         leading: Center(
             child: Image.asset(
@@ -39,7 +54,7 @@ class NotificationsPage extends GetView<NotificationsController> {
           width: 180,
           height: 180,
         )),
-        backgroundColor: const Color.fromARGB(255, 77, 23, 4),
+        backgroundColor: const Color.fromARGB(255, 140, 60, 30),
         actions: [
           _authController.isLogged.value ? botonCerrarSesion() : butonlogin()
         ],
@@ -47,37 +62,44 @@ class NotificationsPage extends GetView<NotificationsController> {
       ),
       body: RefreshIndicator(
           onRefresh: () => _notificationsController.getNotifications(),
-          child: Column(children: [
-            const SizedBox(
-              height: 20,
-            ),
-            const Center(
-              child: Text(
-                "Tus Notificaciones",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              color: Colors.brown[300],
+              child: Column(children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Expanded(
-                child: Obx(
-              () => ListView.separated(
-                separatorBuilder: (context, index) => const Divider(),
-                itemCount: _notificationsController.notificaciones.length,
-                itemBuilder: (context, index) => cardNotificacion(
-                  "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["title"]}",
-                  "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["message"]}",
-                  DateFormat('dd-MM-yyyy').format((_notificationsController.notificaciones[index].data()
-                          as Map<String, dynamic>)["date"]
-                      .toDate()),
+                const Center(
+                  child: Text(
+                    "Tus Notificaciones",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-            )),
-          ])),
+                const SizedBox(
+                  height: 15,
+                ),
+                Expanded(
+                    child: Obx(
+                  () => ListView.separated(
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemCount: _notificationsController.notificaciones.length,
+                    itemBuilder: (context, index) => cardNotificacion(
+                      "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["title"]}",
+                      "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["message"]}",
+                      DateFormat('dd-MM-yyyy').format(
+                          (_notificationsController.notificaciones[index].data()
+                                  as Map<String, dynamic>)["date"]
+                              .toDate()),
+                    ),
+                  ),
+                )),
+              ]),
+            ),
+          )),
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 200, 200, 200),
         child: Row(
