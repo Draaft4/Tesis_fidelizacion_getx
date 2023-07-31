@@ -1,3 +1,4 @@
+import 'package:app_fidelizacion/app/ui/pages/cupons_page/cupons_page.dart';
 import 'package:app_fidelizacion/app/ui/pages/home_page/home_page.dart';
 import 'package:app_fidelizacion/app/ui/pages/login_page/login_page.dart';
 import 'package:app_fidelizacion/app/ui/pages/perfil_page/perfil_page.dart';
@@ -30,6 +31,7 @@ abstract class AppPages {
     GetPage(name: Routes.REGISTERFORM, page: () => RegisterFormPage()),
     GetPage(name: Routes.PERFIL, page: () => PerfilPage()),
     GetPage(name: Routes.NOTIFICATIONS, page: () => NotificationsPage()),
-    GetPage(name: Routes.UPDATE_USER, page: () => UserDataUpdatePage())
+    GetPage(name: Routes.UPDATE_USER, page: () => UserDataUpdatePage()),
+    GetPage(name: Routes.CUPONS, page: () => CuponsPage(),)
   ];
 }

@@ -117,29 +117,6 @@ class PerfilPage extends GetView<PerfilController> {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-              const Center(
-                child: Text(
-                  "Cupones Obtenidos",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemCount: _userController.coupons.length,
-                  itemBuilder: (context, index) => cardCupon(
-                      _userController.coupons[index]["code"],
-                      _userController.coupons[index]["program_name"],
-                      _userController.coupons[index]["fecha de expiracion"],
-                      Image.asset(
-                          "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png")),
-                ),
-              ),
             ],
           ),
         ),
@@ -148,7 +125,7 @@ class PerfilPage extends GetView<PerfilController> {
         color: const Color.fromARGB(255, 200, 200, 200),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [botonHome(), botonnotif(), botonperfil()],
+          children: [botonHome(), botonnotif(), botonCupones(), botonperfil()],
         ),
       ),
     );
@@ -165,7 +142,7 @@ class PerfilPage extends GetView<PerfilController> {
 
   IconButton botonCerrarSesion() {
     return IconButton(
-      icon: const Icon(Icons.close),
+      icon: const Icon(Icons.power_settings_new),
       onPressed: () {
         _authController.cerrarSesion();
       },
@@ -309,48 +286,34 @@ class PerfilPage extends GetView<PerfilController> {
     );
   }
 
-  Card cardCupon(
-      String code, String progName, String expiration, Image imagen) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        side: const BorderSide(color: Colors.black, width: 2.0),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+  GestureDetector botonCupones() {
+    return GestureDetector(
+      onTap: () {
+        if (_authController.isLogged.value) {
+          Get.offNamed('/cupons');
+        } else {
+          _perfilController.initLogin();
+        }
+      },
       child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
+        width: 80,
+        height: 60,
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 200, 200, 200),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 90,
-              width: 90,
-              child: imagen,
-            ),
-            const SizedBox(
-              width: 16.0,
-            ),
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Codigo del cupón: $code",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    )),
-                Text(progName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    )),
-                Text("Fecha de Expiración: $expiration",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ))
-              ],
-            ))
+            Icon(Icons.discount),
+            Text('Cupones',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ))
           ],
         ),
       ),
     );
   }
+
 }

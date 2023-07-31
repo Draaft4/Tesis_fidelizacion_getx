@@ -50,6 +50,7 @@ class HomePage extends GetView<HomeController> {
           children: [
             botonHome(),
             botonnotif(),
+            botonCupones(),
             botonperfil(),
           ],
         ),
@@ -79,7 +80,7 @@ class HomePage extends GetView<HomeController> {
 
   IconButton botonCerrarSesion() {
     return IconButton(
-      icon: const Icon(Icons.close),
+      icon: const Icon(Icons.power_settings_new),
       onPressed: () {
         _authController.cerrarSesion();
       },
@@ -126,12 +127,6 @@ class HomePage extends GetView<HomeController> {
                 const SizedBox(width: 3),
                 cardTemporada(Image.asset("static/Cafecitos-01.jpg")),
                 const SizedBox(width: 3),
-                cardTemporada(Image.asset("static/Cafecitos-02.jpg")),
-                const SizedBox(width: 3),
-                cardTemporada(Image.asset("static/Cafecitos-03.jpg")),
-                const SizedBox(width: 3),
-                cardTemporada(Image.asset("static/Cafecitos-04.jpg")),
-                const SizedBox(width: 3),
                 cardTemporada(Image.asset("static/Cafecitos-05.jpg")),
                 const SizedBox(width: 3),
               ],
@@ -157,18 +152,24 @@ class HomePage extends GetView<HomeController> {
                   itemBuilder: (context, index) {
                     final producto = _homeController.productos[index];
                     if (producto['base64'] != null) {
-                      return cardPromociones(
-                        producto['description'],
-                        producto['required_points'],
-                        Image.memory(base64Decode(producto['base64'])),
-                      );
+                      if (producto['required_points'] != null) {
+                        return cardPromociones(
+                            producto['description'],
+                            producto['required_points'],
+                            Image.memory(base64Decode(producto['base64'])),
+                            (index%2)==0?Image.asset("static/astro1.png"):Image.asset("static/astro2.png"));
+                      } else {
+                        return cardPromocionesImg(
+                          Image.memory(base64Decode(producto['base64'])),
+                        );
+                      }
                     } else {
                       return cardPromociones(
-                        producto['description'],
-                        producto['required_points'],
-                        Image.asset(
-                            "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
-                      );
+                          producto['description'],
+                          producto['required_points'],
+                          Image.asset(
+                              "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
+                          (index%2)==0?Image.asset("static/astro1.png"):Image.asset("static/astro2.png"));
                     }
                   },
                 ),
@@ -213,12 +214,6 @@ class HomePage extends GetView<HomeController> {
               const SizedBox(width: 10),
               cardTemporada(Image.asset("static/Cafecitos-01.jpg")),
               const SizedBox(width: 10),
-              cardTemporada(Image.asset("static/Cafecitos-02.jpg")),
-              const SizedBox(width: 10),
-              cardTemporada(Image.asset("static/Cafecitos-03.jpg")),
-              const SizedBox(width: 10),
-              cardTemporada(Image.asset("static/Cafecitos-04.jpg")),
-              const SizedBox(width: 10),
               cardTemporada(Image.asset("static/Cafecitos-05.jpg")),
               const SizedBox(width: 10),
             ],
@@ -240,25 +235,31 @@ class HomePage extends GetView<HomeController> {
           height: 20,
         ),
         Obx(() => SizedBox(
-              height: 130 * _homeController.productos.length.toDouble(),
+              height: 185 * _homeController.productos.length.toDouble(),
               child: ListView.builder(
                 itemCount: _homeController.productos.length,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final producto = _homeController.productos[index];
                   if (producto['base64'] != null) {
-                    return cardPromociones(
-                      producto['description'],
-                      producto['required_points'],
-                      Image.memory(base64Decode(producto['base64'])),
-                    );
+                    if (producto['required_points'] != null) {
+                      return cardPromociones(
+                          producto['description'],
+                          producto['required_points'],
+                          Image.memory(base64Decode(producto['base64'])),
+                          (index%2)==0?Image.asset("static/astro1.png"):Image.asset("static/astro2.png"));
+                    } else {
+                      return cardPromocionesImg(
+                        Image.memory(base64Decode(producto['base64'])),
+                      );
+                    }
                   } else {
                     return cardPromociones(
-                      producto['description'],
-                      producto['required_points'],
-                      Image.asset(
-                          "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
-                    );
+                        producto['description'],
+                        producto['required_points'],
+                        Image.asset(
+                            "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
+                        (index%2)==0?Image.asset("static/astro1.png"):Image.asset("static/astro2.png"));
                   }
                 },
               ),
@@ -301,6 +302,7 @@ class HomePage extends GetView<HomeController> {
     String description,
     double requiredPoints,
     Image imagen,
+    Image imagenastro,
   ) {
     return Card(
       shape: RoundedRectangleBorder(
@@ -313,36 +315,74 @@ class HomePage extends GetView<HomeController> {
           borderRadius: BorderRadius.circular(8.0),
         ),
         padding: const EdgeInsets.all(16.0),
-        child: Row(
+        child: Column(
           children: [
-            SizedBox(
-              height: 90,
-              width: 90,
-              child: imagen,
+            Row(
+              children: [
+                SizedBox(
+                  height: 90,
+                  width: 90,
+                  child: imagen,
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        description,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Puntos Requeridos: $requiredPoints',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: SizedBox(
+                    width: 75,
+                    height: 75,
+                    child: imagenastro,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    description,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Puntos Requeridos: $requiredPoints',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: 130,
+                height: 30,
+                child: Image.asset("static/linea.png"),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Card cardPromocionesImg(
+    Image imagen,
+  ) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(color: Colors.black, width: 2.0),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          padding: const EdgeInsets.all(16.0),
+          child: imagen),
     );
   }
 
@@ -438,6 +478,36 @@ class HomePage extends GetView<HomeController> {
           children: [
             Icon(Icons.notifications),
             Text('Notificaciones',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector botonCupones() {
+    return GestureDetector(
+      onTap: () {
+        if (_authController.isLogged.value) {
+          Get.offNamed('/cupons');
+        } else {
+          _homeController.initLogin();
+        }
+      },
+      child: Container(
+        width: 80,
+        height: 60,
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 200, 200, 200),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.discount),
+            Text('Cupones',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,

@@ -11,8 +11,6 @@ class UserController extends GetxController {
 
   int id = 0;
 
-  List<dynamic> coupons = [].obs;
-
   void clearUser() {
     usuario = User(0, '', '', '', '', '', 0).obs;
   }
@@ -31,15 +29,9 @@ class UserController extends GetxController {
     usuario.value.phone = phone;
     usuario.value.bithDate = birthDate;
     usuario.value.points = points;
-    getCupondata();
   }
 
-  void getCupondata() async {
-    final response =
-        await http.get(Uri.parse('${constants.url}/api/coupons?id=${usuario.value.id}'));
-    final List<dynamic> jsonResponse = json.decode(response.body);
-    coupons = jsonResponse;
-  }
+
 
   Future<void> updateData() async {
     var url = Uri.parse('${constants.url}/api/clientData?id=${usuario.value.id}');
@@ -57,6 +49,5 @@ class UserController extends GetxController {
             userJson['phone'],
             userJson['birth_date'],
             pointsJson[0]["points"]);
-    getCupondata();
   }
 }

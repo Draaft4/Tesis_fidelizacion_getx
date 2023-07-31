@@ -33,6 +33,16 @@ class HomeController extends GetxController {
         productos.add(element);
       }
     }
+    url = Uri.parse('${constants.url}/api/loyaltyImg');
+    response = await http.get(url);
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      List<Map<String, dynamic>> cupons =
+          List<Map<String, dynamic>>.from(jsonResponse);
+      for (var element in cupons) {
+        productos.add(element);
+      }
+    }
     url = Uri.parse('${constants.url}/api/loyalty_rules');
     response = await http.get(url);
     if (response.statusCode == 200) {

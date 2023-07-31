@@ -1,15 +1,13 @@
 import 'dart:ui';
 
+import 'package:app_fidelizacion/app/controllers/cupons_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../controllers/notifications_controller.dart';
 import 'package:app_fidelizacion/app/controllers/auth_controller.dart';
-import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
-class NotificationsPage extends GetView<NotificationsController> {
-  final NotificationsController _notificationsController =
-      Get.put(NotificationsController());
+class CuponsPage extends GetView<CuponsController> {
+  final CuponsController _cuponsController = Get.put(CuponsController());
   final Auth_Controller _authController = Get.find();
   List notificaciones = [];
   @override
@@ -18,6 +16,10 @@ class NotificationsPage extends GetView<NotificationsController> {
     return Stack(
       children: [background(), backgroundFilter(), content()],
     );
+  }
+
+  void updateList() async {
+    await _cuponsController.getCupondata();
   }
 
   BackdropFilter backgroundFilter() {
@@ -40,10 +42,6 @@ class NotificationsPage extends GetView<NotificationsController> {
     );
   }
 
-  void updateList() async {
-    await _notificationsController.getNotifications();
-  }
-
   Widget content() {
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -58,13 +56,11 @@ class NotificationsPage extends GetView<NotificationsController> {
         actions: [
           _authController.isLogged.value ? botonCerrarSesion() : butonlogin()
         ],
-        title: const Text('Notificaciones'),
+        title: const Text('Cupones'),
       ),
-      body: RefreshIndicator(
-          onRefresh: () => _notificationsController.getNotifications(),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
+      body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Card(
               color: Colors.brown[300],
               child: Column(children: [
                 const SizedBox(
@@ -74,54 +70,68 @@ class NotificationsPage extends GetView<NotificationsController> {
                   height: 15,
                 ),
                 Expanded(
-                    child: Obx(
-                  () => ListView.separated(
-                    separatorBuilder: (context, index) => const Divider(),
-                    itemCount: _notificationsController.notificaciones.length,
-                    itemBuilder: (context, index) => cardNotificacion(
-                      "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["title"]}",
-                      "${(_notificationsController.notificaciones[index].data() as Map<String, dynamic>)["message"]}",
-                      DateFormat('dd-MM-yyyy').format(
-                          (_notificationsController.notificaciones[index].data()
-                                  as Map<String, dynamic>)["date"]
-                              .toDate()),
-                    ),
-                  ),
-                )),
-              ]),
-            ),
-          )),
+                    child: Obx(() => ListView.separated(
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemCount: _cuponsController.coupons.length,
+                        itemBuilder: (context, index) => cardCupon(
+                              _cuponsController.coupons[index]['code'],
+                              _cuponsController.coupons[index]['program_name'],
+                              _cuponsController.coupons[index]
+                                  ['fecha de expiracion'],
+                              Image.asset(
+                                  "static/png-transparent-coupon-discounts-and-allowances-computer-icons-coupon-miscellaneous-text-retail.png"),
+                            )))),
+              ]))),
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 200, 200, 200),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [botonHome(), botonnotif(),botonCupones(), botonperfil()],
+          children: [botonHome(), botonnotif(), botonCupones(), botonperfil()],
         ),
       ),
     );
   }
 
-  Card cardNotificacion(
-      String valtitle, String valDescriptions, String valdate) {
+  Card cardCupon(
+      String code, String progName, String expiration, Image imagen) {
     return Card(
-      child: ListTile(
-        title: Text(
-          valtitle,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Text(
-          valDescriptions,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        trailing: Text(
-          valdate,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(color: Colors.black, width: 2.0),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            SizedBox(
+              height: 90,
+              width: 90,
+              child: imagen,
+            ),
+            const SizedBox(
+              width: 16.0,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Codigo del cupón: $code",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )),
+                Text(progName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )),
+                Text("Fecha de Expiración: $expiration",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ))
+              ],
+            ))
+          ],
         ),
       ),
     );
@@ -139,7 +149,7 @@ class NotificationsPage extends GetView<NotificationsController> {
   IconButton butonlogin() {
     return IconButton(
         onPressed: () {
-          _notificationsController.initLogin();
+          _cuponsController.initLogin();
         },
         icon: const Icon(Icons.account_circle));
   }
@@ -202,11 +212,7 @@ class NotificationsPage extends GetView<NotificationsController> {
   GestureDetector botonCupones() {
     return GestureDetector(
       onTap: () {
-        if (_authController.isLogged.value) {
-          Get.offNamed('/cupons');
-        } else {
-          _notificationsController.initLogin();
-        }
+        Get.offNamed('/cupons');
       },
       child: Container(
         width: 80,
@@ -232,11 +238,7 @@ class NotificationsPage extends GetView<NotificationsController> {
   GestureDetector botonperfil() {
     return GestureDetector(
       onTap: () {
-        if (_authController.isLogged.value) {
-          Get.offNamed("/perfil");
-        } else {
-          _notificationsController.initLogin();
-        }
+        Get.offNamed("/perfil");
       },
       child: Container(
         width: 40,
