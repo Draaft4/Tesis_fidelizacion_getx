@@ -83,7 +83,7 @@ class Auth_Controller extends GetxController {
             userJson['vat'],
             userJson['phone'],
             userJson['birth_date'],
-            pointsJson[0]["points"]);
+            pointsJson[0]!=null?pointsJson[0]["points"]:0);
       }
       // ignore: unused_local_variable
       final credential = await FirebaseAuth.instance

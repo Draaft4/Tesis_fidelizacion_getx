@@ -7,7 +7,7 @@ import 'dart:convert';
 class CuponsController extends GetxController {
   final UserController _userController = Get.find();
 
-  List<dynamic> coupons = [].obs;
+  RxList<dynamic> coupons = <dynamic>[].obs;
 
   Constants constants = Constants();
 
@@ -26,6 +26,6 @@ class CuponsController extends GetxController {
     final response =
         await http.get(Uri.parse('${constants.url}/api/coupons?id=${_userController.usuario.value.id}'));
     final List<dynamic> jsonResponse = json.decode(response.body);
-    coupons = jsonResponse;
+    coupons.assignAll(jsonResponse);
   }
 }

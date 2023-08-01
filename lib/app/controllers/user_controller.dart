@@ -31,23 +31,21 @@ class UserController extends GetxController {
     usuario.value.points = points;
   }
 
-
-
   Future<void> updateData() async {
-    var url = Uri.parse('${constants.url}/api/clientData?id=${usuario.value.id}');
+    var url =
+        Uri.parse('${constants.url}/api/clientData?id=${usuario.value.id}');
     var response = await http.get(url);
     var userJson = json.decode(response.body);
-    url =
-            Uri.parse('${constants.url}/api/loyaltyData?id=${userJson['id']}');
-        response = await http.get(url);
-        var pointsJson = json.decode(response.body);
+    url = Uri.parse('${constants.url}/api/loyaltyData?id=${userJson['id']}');
+    response = await http.get(url);
+    var pointsJson = json.decode(response.body);
     setUserData(
-            userJson['id'],
-            userJson['name'],
-            userJson['email'],
-            userJson['vat'],
-            userJson['phone'],
-            userJson['birth_date'],
-            pointsJson[0]["points"]);
+        userJson['id'],
+        userJson['name'],
+        userJson['email'],
+        userJson['vat'],
+        userJson['phone'],
+        userJson['birth_date'],
+        pointsJson[0]!=null?pointsJson[0]["points"]:0);
   }
 }
